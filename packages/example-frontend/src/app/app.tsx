@@ -5,10 +5,9 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { mainnet, polygon, optimism, arbitrum } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
-import NxWelcome from './nx-welcome';
 
-import { init } from '@dgca/use-typechain-contracts';
-import { factories } from '@dgca/example-contracts';
+import { TypeChainProvider } from '../utils/contracts';
+import { Demo } from './demo';
 
 const { chains, provider } = configureChains(
   [mainnet, polygon, optimism, arbitrum],
@@ -26,30 +25,16 @@ const wagmiClient = createClient({
   provider,
 });
 
-const { TypeChainProvider, useContracts } = init(factories, {
-  Greeter: '0x0',
-});
-
 export function App() {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
         <TypeChainProvider>
-          <Child />
-          <NxWelcome title="example-frontend" />
+          <Demo />
         </TypeChainProvider>
       </RainbowKitProvider>
     </WagmiConfig>
   );
-}
-
-function Child() {
-  const contracts = useContracts();
-
-  contracts.Greeter();
-  contracts.Todos('');
-
-  return <p>Hello world</p>;
 }
 
 export default App;
