@@ -1,6 +1,16 @@
 {
   "name": "use-typechain-contracts",
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "description": "React hook to facilitate using TypeChain contract factories.",
+  "license": "MIT",
+  "author": "Dan Cortes",
+  "repository": "github:dgca/use-typechain-contracts",
+  "keywords": [
+    "react",
+    "typescript",
+    "ethereum",
+    "solidity"
+  ],
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
