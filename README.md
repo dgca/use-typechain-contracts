@@ -16,6 +16,8 @@ React hook and context provider that allows you to easily consume connected Type
 * `react >=16`
 * `ethers ^5.7.0`
 * `wagmi ^0.9.0 || ^0.10.0`
+* [TypeChain](https://github.com/dethcrypto/TypeChain)
+  * Not a dependency of the project, but this library wraps TypeChain's generated contract factories to work.
 
 ## Usage
 
