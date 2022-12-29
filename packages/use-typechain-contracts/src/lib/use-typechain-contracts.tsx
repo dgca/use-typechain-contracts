@@ -38,11 +38,19 @@ export function init<
         >;
       };
 
+  type HasDefaultAddresses = U extends infer R
+    ? Record<string, string> extends R
+      ? false
+      : true
+    : never;
+
   type TypeChainProviderValue = ContractNames extends never
     ? never
     : {
-        [K in ContractNames]: K extends keyof U
-          ? (address?: string) => ContractNamesToContracts[K]
+        [K in ContractNames]: HasDefaultAddresses extends true
+          ? K extends keyof U
+            ? (address?: string) => ContractNamesToContracts[K]
+            : (address: string) => ContractNamesToContracts[K]
           : (address: string) => ContractNamesToContracts[K];
       };
 

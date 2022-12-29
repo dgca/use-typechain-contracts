@@ -1,6 +1,6 @@
 {
   "name": "use-typechain-contracts",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "React hook to facilitate using TypeChain contract factories.",
   "license": "MIT",
   "author": "Dan Cortes",
@@ -13,12 +13,6 @@
   ],
   "main": "./index.js",
   "types": "./index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
-    }
-  },
   "peerDependencies": {
     "react": ">=16",
     "ethers": "^5.7.0",
