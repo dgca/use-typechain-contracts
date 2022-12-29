@@ -21,6 +21,13 @@ React hook and context provider that allows you to easily consume connected Type
 
 ## Usage
 
+### Installation
+
+You know the drill...
+
+* `npm install use-typechain-contracts`
+* `yarn add use-typechain-contracts`
+
 ### Initialization
 
 First, initialize the system by calling the `init` function and passing it TypeChain's generated factories as the first argument.
