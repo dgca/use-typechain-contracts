@@ -1,24 +1,28 @@
-import { ContractFactory, Signer, providers } from 'ethers';
+import { Signer, providers } from 'ethers';
 import React, { useContext, useMemo } from 'react';
 import { useProvider } from 'wagmi';
 
 type Provider = providers.Provider;
 
-type TypechainFactory = Omit<typeof ContractFactory, 'connect'> & {
+type TypeChainFactory = {
   connect(address: string, signerOrProvider: Signer | Provider): any;
 };
 
 export function init<
-  T extends Record<string, TypechainFactory>,
+  T extends Record<string, unknown>,
   U extends Record<string, string>
->(factories: T, defaultAddresses?: U) {
-  type FactoriesMap = T extends Record<infer R, any>
-    ? {
-        [K in R]: T[K];
-      }
+>(typechainExports: T, defaultAddresses?: U) {
+  type FactoryKeys = T extends Record<infer R, any>
+    ? R extends `${string}__factory`
+      ? R
+      : never
     : never;
 
-  type FactoryKeys = T extends Record<infer R, any> ? R : never;
+  type FactoriesMap = FactoryKeys extends never
+    ? never
+    : {
+        [K in FactoryKeys]: T[K] extends TypeChainFactory ? T[K] : never;
+      };
 
   type Factories = FactoriesMap extends never
     ? never
@@ -33,9 +37,9 @@ export function init<
   type ContractNamesToContracts = ContractNames extends never
     ? never
     : {
-        [K in ContractNames]: ReturnType<
-          FactoriesMap[`${K}__factory`]['connect']
-        >;
+        [K in ContractNames]: `${K}__factory` extends keyof FactoriesMap
+          ? ReturnType<FactoriesMap[`${K}__factory`]['connect']>
+          : never;
       };
 
   type HasDefaultAddresses = U extends infer R
@@ -55,7 +59,7 @@ export function init<
       };
 
   const factoryKeysLookup = new Set(
-    Object.keys(factories).filter((key): key is FactoryKeys =>
+    Object.keys(typechainExports).filter((key): key is FactoryKeys =>
       key.endsWith('__factory')
     )
   );
@@ -77,9 +81,11 @@ export function init<
   function isTypeChainProviderValue(
     obj: Record<string, unknown>
   ): obj is TypeChainProviderValue {
-    const contractNames = Object.keys(factories).map((name) =>
-      name.replace(/__factory$/, '')
-    );
+    const contractNames = Object.keys(typechainExports)
+      .map((name) => name.replace(/__factory$/, ''))
+      .filter((name): name is ContractNames =>
+        isFactoryKey(`${name}__factory`)
+      );
 
     return contractNames.every((key) => key in obj);
   }
@@ -120,7 +126,7 @@ export function init<
     const provider = useProvider();
 
     const value = useMemo(() => {
-      const factoryEntries = Object.entries(factories)
+      const factoryEntries = Object.entries(typechainExports)
         .filter((entry): entry is [string, Factories] => {
           const [name] = entry;
           return isFactoryKey(name);

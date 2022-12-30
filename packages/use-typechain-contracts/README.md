@@ -30,7 +30,7 @@ You know the drill...
 
 ### Initialization
 
-First, initialize the system by calling the `init` function and passing it TypeChain's generated factories as the first argument.
+First, initialize the system by calling the `init` function and passing all of TypeChain's exports (e.g. do this via `import * as typechain from '...'`) as the first argument.
 
 If you'd like to set up some default contract addresses, you may optionally do so by passing an object as a second argument where the keys are the name of the contracts, and the values are the address for that contract. If you do not pass a default contract address for a contract, you'll have to provide it when using the `useContracts` hook.
 
@@ -40,7 +40,7 @@ If you'd like to set up some default contract addresses, you may optionally do s
 // src/utils/contracts.ts
 import { init } from 'use-typechain-contracts';
 
-import { factories } from 'path/to/typechain';
+import * as typechain from 'path/to/typechain';
 
 /*
  * Assume my project has two contracts, Greeter and Todos. Greeter is a singleton that
@@ -52,7 +52,7 @@ import { factories } from 'path/to/typechain';
  * In order to use a Todo instance, I'll have to specify the address when using `useContracts()`.
  * E.g. `const todoInstance = useContracts().Todos('0xEXAMPLExADDRESS')`.
  */
-const { TypeChainProvider, useContracts } = init(factories, {
+const { TypeChainProvider, useContracts } = init(typechain, {
   Greeter: '0x123xDEMOxADDRESSx420',
 });
 

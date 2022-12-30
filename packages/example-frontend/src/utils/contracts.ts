@@ -1,7 +1,7 @@
 import { init } from '@dgca/use-typechain-contracts';
-import { factories } from '@dgca/example-contracts';
+import * as typechain from '@dgca/example-contracts';
 
-const { TypeChainProvider, useContracts } = init(factories, {
+const { TypeChainProvider, useContracts } = init(typechain, {
   Greeter: '0x123xDEMOxADDRESSx420',
 });
 

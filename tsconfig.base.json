@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "noErrorTruncation": true,
     "paths": {
       "@dgca/example-contracts": ["packages/example-contracts/src/index.ts"],
       "@dgca/use-typechain-contracts": [
